@@ -142,11 +142,11 @@ export const verifyOtp = async (req, res) => {
       type,
     });
 
-    console.log("SESSION:", data.session);
-    console.log("REFRESH:", data.session?.refresh_token);
+    // console.log("SESSION:", data.session);
+    // console.log("REFRESH:", data.session?.refresh_token);
 
-    console.log("VERIFY ERROR:", error);
-    console.log("USER:", data?.user);
+    // console.log("VERIFY ERROR:", error);
+    // console.log("USER:", data?.user);
 
     if (error) {
       return res.status(400).json({
@@ -175,7 +175,7 @@ export const verifyOtp = async (req, res) => {
     }
 
     // DEMO JWT
-    console.log("JWT:", data.session.access_token);
+    // console.log("JWT:", data.session.access_token);
 
     return res.json({
       message: "OTP valid",
@@ -331,10 +331,10 @@ export const googleSync = async (req, res) => {
     const client = req.supabase;
     const user = req.user;
 
-    console.log("========== GOOGLE SYNC ==========");
-    console.log("USER ID:", user.id);
-    console.log("EMAIL:", user.email);
-    console.log("METADATA:", user.user_metadata);
+    // console.log("========== GOOGLE SYNC ==========");
+    // console.log("USER ID:", user.id);
+    // console.log("EMAIL:", user.email);
+    // console.log("METADATA:", user.user_metadata);
 
     const { data: existingUser, error: checkError } = await client
       .from("users")
@@ -399,8 +399,8 @@ export const updatePassword = async (req, res) => {
   try {
     const { access_token, refresh_token, new_password } = req.body;
 
-    console.log("ACCESS TOKEN:", access_token);
-    console.log("NEW PASSWORD:", new_password);
+    // console.log("ACCESS TOKEN:", access_token);
+    // console.log("NEW PASSWORD:", new_password);
 
     if (!access_token || !new_password) {
       return res.status(400).json({
@@ -429,14 +429,14 @@ export const updatePassword = async (req, res) => {
     const { data: userData, error: userError } =
       await client.auth.getUser(access_token);
 
-    console.log("USER ERROR:", userError);
-    console.log("USER DATA:", userData);
+    // console.log("USER ERROR:", userError);
+    // console.log("USER DATA:", userData);
 
     const { data: sessionData, error: sessionError } =
       await client.auth.getSession();
 
-    console.log("SESSION ERROR:", sessionError);
-    console.log("SESSION DATA:", sessionData);
+    // console.log("SESSION ERROR:", sessionError);
+    // console.log("SESSION DATA:", sessionData);
 
     await client.auth.setSession({
       access_token,
@@ -494,8 +494,8 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    console.log("BODY:", req.body);
-    console.log("FILE:", req.file);
+    // console.log("BODY:", req.body);
+    // console.log("FILE:", req.file);
 
     const client = req.supabase;
     const userId = req.user.id;

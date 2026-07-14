@@ -61,6 +61,7 @@ export const addVehicle = async (req, res) => {
     // ================= GET USER =================
     const client = req.supabase;
     const user = req.user;
+    const now = new Date();
 
     // ================= INSERT VEHICLE =================
     const { data: vehicleData, error: vehicleError } = await client
@@ -79,16 +80,13 @@ export const addVehicle = async (req, res) => {
 
         estimated_km_per_day,
         current_odometer,
-      })
 
+        last_odometer_update: now,
+      })
       .select()
       .single();
 
-    console.log("SELESAI INSERT VEHICLE");
-    console.log(vehicleData);
     if (vehicleError) {
-      console.log("SUPABASE ERROR:");
-      console.log(vehicleError);
       return res.status(400).json({
         error: vehicleError.message,
         details: vehicleError.details,
@@ -148,8 +146,8 @@ export const addVehicle = async (req, res) => {
         .insert(componentRows)
         .select();
 
-      console.log("INSERTED COMPONENTS:");
-      console.log(insertedComponents);
+      // console.log("INSERTED COMPONENTS:");
+      // console.log(insertedComponents);
 
       if (componentError) {
         console.log(componentError);
@@ -190,7 +188,7 @@ export const addVehicle = async (req, res) => {
       console.log(performanceError);
     }
 
-    console.log("AKAN RETURN SUKSES");
+    // console.log("AKAN RETURN SUKSES");
 
     return res.status(200).json({
       message: "Kendaraan berhasil ditambahkan",
@@ -221,11 +219,11 @@ export const vehicleHealth = async (req, res) => {
 
     const { data, error } = await client.from("master_components").select("*");
 
-    console.log("MASTER:");
-    console.log(data);
+    // console.log("MASTER:");
+    // console.log(data);
 
-    console.log("MASTER ERROR:");
-    console.log(error);
+    // console.log("MASTER ERROR:");
+    // console.log(error);
 
     if (vehicleError || !vehicle) {
       return res.status(404).json({
@@ -271,17 +269,17 @@ export const vehicleHealth = async (req, res) => {
       .eq("vehicle_id", vehicleId)
       .order("component_id", { ascending: true });
 
-    console.log(componentError);
+    // console.log(componentError);
 
     const { data: rawComponents, error: rawError } = await client
       .from("vehicle_components")
       .select("*")
       .eq("vehicle_id", vehicleId);
 
-    console.log("RAW COMPONENTS:");
-    console.log(rawComponents);
-    console.log("RAW ERROR:");
-    console.log(rawError);
+    // console.log("RAW COMPONENTS:");
+    // console.log(rawComponents);
+    // console.log("RAW ERROR:");
+    // console.log(rawError);
 
     if (componentError) {
       return res.status(400).json({
@@ -291,8 +289,8 @@ export const vehicleHealth = async (req, res) => {
 
     // ================= HITUNG UMUR KOMPONEN =================
 
-    console.log("EST KM:", vehicle.estimated_km_per_day);
-    console.log("COMPONENTS:", components);
+    // console.log("EST KM:", vehicle.estimated_km_per_day);
+    // console.log("COMPONENTS:", components);
 
     const results = components.map((item) => {
       console.log("ITEM:", item);
@@ -313,9 +311,9 @@ export const vehicleHealth = async (req, res) => {
 
       const serviceDays = master.max_days - remainingDays;
 
-      console.log("USED KM:", usedKm);
-      console.log("REMAINING KM:", remainingKm);
-      console.log("REMAINING DAYS:", remainingDays);
+      // console.log("USED KM:", usedKm);
+      // console.log("REMAINING KM:", remainingKm);
+      // console.log("REMAINING DAYS:", remainingDays);
 
       const kmPercent = (remainingKm / master.max_km) * 100;
 
@@ -407,11 +405,6 @@ export const getMyVehicle = async (req, res) => {
     const client = req.supabase;
     const user = req.user;
 
-    console.log("================================");
-    console.log("USER ID:", user.id);
-    console.log("EMAIL:", user.email);
-    console.log("================================");
-
     const { data, error } = await client
       .from("vehicles")
       .select("*")
@@ -420,7 +413,6 @@ export const getMyVehicle = async (req, res) => {
       .limit(1)
       .single();
 
-    console.log("VEHICLE:", data);
     console.log("ERROR:", error);
 
     if (error || !data) {
@@ -503,7 +495,7 @@ export const getMyVehicles = async (req, res) => {
       });
     }
 
-    console.log("[getMyVehicles] Final response:", result);
+    // console.log("[getMyVehicles] Final response:", result);
 
     return res.status(200).json(result);
   } catch (err) {
@@ -639,9 +631,9 @@ export const updateOdometer = async (req, res) => {
         .eq("id", component.id)
         .select();
 
-      console.log("UPDATE COMPONENT:", component.id);
-      console.log("DATA:", data);
-      console.log("ERROR:", error);
+      // console.log("UPDATE COMPONENT:", component.id);
+      // console.log("DATA:", data);
+      // console.log("ERROR:", error);
     }
 
     await client
@@ -833,8 +825,8 @@ export const getVehicleOdometer = async (req, res) => {
     const { vehicleId } = req.params;
     const client = req.supabase;
 
-    console.log("================================");
-    console.log("VEHICLE ID:", vehicleId);
+    // console.log("================================");
+    // console.log("VEHICLE ID:", vehicleId);
 
     const { data, error } = await client
       .from("vehicles")
@@ -850,9 +842,9 @@ export const getVehicleOdometer = async (req, res) => {
       });
     }
 
-    console.log("CURRENT ODOMETER:", data.current_odometer);
-    console.log("LAST ODOMETER UPDATE:", data.last_odometer_update);
-    console.log("================================");
+    // console.log("CURRENT ODOMETER:", data.current_odometer);
+    // console.log("LAST ODOMETER UPDATE:", data.last_odometer_update);
+    // console.log("================================");
 
     return res.status(200).json(data);
   } catch (err) {
@@ -940,10 +932,10 @@ export const createServiceHistory = async (req, res) => {
 
 export const getServiceHistory = async (req, res) => {
   try {
-    console.log("========== SERVICE HISTORY ==========");
-    console.log("BODY:", req.body);
-    console.log("USER:", req.user);
-    console.log("====================================");
+    // console.log("========== SERVICE HISTORY ==========");
+    // console.log("BODY:", req.body);
+    // console.log("USER:", req.user);
+    // console.log("====================================");
 
     const client = req.supabase;
     const { vehicleId } = req.params;
@@ -1097,10 +1089,10 @@ export const deleteServiceHistory = async (req, res) => {
 };
 
 export const generateNotifications = async (client, vehicleId) => {
-  console.log("================================");
-  console.log("GENERATE NOTIFICATIONS");
-  console.log("VEHICLE ID:", vehicleId);
-  console.log("================================");
+  // console.log("================================");
+  // console.log("GENERATE NOTIFICATIONS");
+  // console.log("VEHICLE ID:", vehicleId);
+  // console.log("================================");
 
   const { data: components } = await client
     .from("vehicle_components")
@@ -1120,7 +1112,7 @@ export const generateNotifications = async (client, vehicleId) => {
     )
     .eq("vehicle_id", vehicleId);
 
-  console.log("COMPONENTS:", components);
+  // console.log("COMPONENTS:", components);
 
   if (!components) return;
 
@@ -1129,23 +1121,23 @@ export const generateNotifications = async (client, vehicleId) => {
     .select("id")
     .eq("vehicle_id", vehicleId);
 
-  console.log("BEFORE DELETE:", before?.length);
+  // console.log("BEFORE DELETE:", before?.length);
 
   const { error: deleteError } = await client
     .from("notifications")
     .delete()
     .eq("vehicle_id", vehicleId);
 
-  console.log("DELETE ERROR:", deleteError);
+  // console.log("DELETE ERROR:", deleteError);
 
   const { data: after } = await client
     .from("notifications")
     .select("id")
     .eq("vehicle_id", vehicleId);
 
-  console.log("AFTER DELETE:", after?.length);
+  // console.log("AFTER DELETE:", after?.length);
 
-  console.log("DELETE ERROR:", deleteError);
+  // console.log("DELETE ERROR:", deleteError);
 
   for (const item of components) {
     const master = Array.isArray(item.master_components)
@@ -1160,10 +1152,10 @@ export const generateNotifications = async (client, vehicleId) => {
     let severity = null;
     let message = null;
 
-    console.log("COMPONENT:", master.name);
-    console.log("remaining_days:", item.remaining_days);
-    console.log("remaining_km:", item.remaining_km);
-    console.log("healthPercent:", healthPercent);
+    // console.log("COMPONENT:", master.name);
+    // console.log("remaining_days:", item.remaining_days);
+    // console.log("remaining_km:", item.remaining_km);
+    // console.log("healthPercent:", healthPercent);
 
     if (
       healthPercent <= 20 ||
@@ -1221,15 +1213,15 @@ export const generateNotifications = async (client, vehicleId) => {
       })
       .select();
 
-    console.log("NOTIF DATA:", notifData);
-    console.log("NOTIF ERROR:", notifError);
+    // console.log("NOTIF DATA:", notifData);
+    // console.log("NOTIF ERROR:", notifError);
   }
 };
 
 export const getNotifications = async (req, res) => {
   const { vehicleId } = req.params;
 
-  console.log("GET NOTIFICATIONS VEHICLE:", vehicleId);
+  // console.log("GET NOTIFICATIONS VEHICLE:", vehicleId);
 
   const { data, error } = await req.supabase
     .from("notifications")
@@ -1245,8 +1237,8 @@ export const getNotifications = async (req, res) => {
     .eq("vehicle_id", vehicleId)
     .order("created_at", { ascending: false });
 
-  console.log("NOTIF DATA:", data);
-  console.log("NOTIF ERROR:", error);
+  // console.log("NOTIF DATA:", data);
+  // console.log("NOTIF ERROR:", error);
 
   if (error) {
     return res.status(400).json({ error: error.message });

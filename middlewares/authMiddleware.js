@@ -38,11 +38,11 @@ export const authMiddleware = async (req, res, next) => {
       });
     }
 
-    console.log("================================");
-    console.log("TOKEN:", access_token);
-    console.log("USER ID:", user.id);
-    console.log("EMAIL:", user.email);
-    console.log("================================");
+    // console.log("================================");
+    // console.log("TOKEN:", access_token);
+    // console.log("USER ID:", user.id);
+    // console.log("EMAIL:", user.email);
+    // console.log("================================");
 
     req.user = user;
     req.supabase = client;

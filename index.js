@@ -5,12 +5,21 @@ import workshopRoutes from "./routes/workshopRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import vehicleRoutes from "./routes/vehicleRoutes.js";
 import ocrRoutes from "./routes/ocrRoutes.js";
-import eduRoutes from "./routes/eduRoutes.js";
 import diagnoseRoutes from "./routes/diagnoseRoutes.js";
+import analysisRoutes from "./routes/analysisRoutes.js";
+import edukasiRoutes from "./routes/eduRoutes.js";
 
 dotenv.config();
 
+import connectDB from "./config/mongodb.js";
+import { jalankanPipelineData } from "./data/rssScheduler.js";
+
 const app = express();
+
+connectDB().then(() => {
+  console.log("Menjalankan penarikan data awal");
+  jalankanPipelineData();
+});
 
 // ================= SECURITY =================
 app.use(
@@ -37,9 +46,11 @@ app.use("/api", ocrRoutes);
 
 app.use("/api/workshop", workshopRoutes);
 
-app.use("/api/edukasi", eduRoutes);
+app.use("/api/edukasi", edukasiRoutes);
 
 app.use("/api/kerusakan", diagnoseRoutes);
+
+app.use("/api/analisis", analysisRoutes);
 
 // ================= PORT =================
 const PORT = process.env.PORT || 3000;
