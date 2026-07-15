@@ -4,7 +4,6 @@ import {
   getDashboardData,
   getKomponenFilter,
   getArtikelFilter,
-  getTrenServis,
   getTrendTopikArtikel,
 } from "../controllers/analysisController.js";
 
@@ -13,8 +12,6 @@ const router = express.Router();
 router.get("/tren-komponen", getTrenKomponenServis);
 
 router.get("/komponen-filter", getKomponenFilter);
-
-router.get("/tren-servis", getTrenServis);
 
 router.get("/artikel", getDashboardData);
 

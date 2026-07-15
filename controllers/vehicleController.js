@@ -1213,8 +1213,8 @@ export const generateNotifications = async (client, vehicleId) => {
       })
       .select();
 
-    // console.log("NOTIF DATA:", notifData);
-    // console.log("NOTIF ERROR:", notifError);
+    console.log("NOTIF DATA:", notifData);
+    console.log("NOTIF ERROR:", notifError);
   }
 };
 
@@ -1222,6 +1222,8 @@ export const getNotifications = async (req, res) => {
   const { vehicleId } = req.params;
 
   // console.log("GET NOTIFICATIONS VEHICLE:", vehicleId);
+
+  await generateNotifications(req.supabase, vehicleId);
 
   const { data, error } = await req.supabase
     .from("notifications")
