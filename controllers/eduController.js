@@ -1,4 +1,4 @@
-import Artikel from '../data/Artikel.js';
+import Artikel from '../data/artikel.js';
 
 function formatTanggalIndo(rawDate) {
     if (!rawDate) return "Baru-baru ini";
