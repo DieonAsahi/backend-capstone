@@ -16,10 +16,22 @@ import { jalankanPipelineData } from "./data/rssScheduler.js";
 
 const app = express();
 
-connectDB().then(() => {
-  console.log("Menjalankan penarikan data awal");
-  jalankanPipelineData();
-});
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    console.log("Menjalankan penarikan data awal");
+    await jalankanPipelineData();
+
+    app.listen(PORT, () => {
+      console.log(`Server jalan di port ${PORT}`);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+startServer();
 
 // ================= SECURITY =================
 app.use(

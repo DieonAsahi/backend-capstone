@@ -17,7 +17,8 @@ const connectDB = async () => {
     console.log(`MongoDB Atlas Terkoneksi ke: ${conn.connection.host}`);
   } catch (error) {
     console.error(`Gagal terhubung ke MongoDB Atlas: ${error.message}`);
-    }
+    throw error;
+  }
 };
 
 export default connectDB;
