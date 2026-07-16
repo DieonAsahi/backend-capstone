@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getWorkshop = async (req, res) => {
   try {
-    const response = await axios.get("http://127.0.0.1:8000/workshop");
+    const response = await axios.get("https://web-production-ca5ab.up.railway.app/workshop");
 
     return res.json(response.data);
   } catch (e) {
@@ -17,7 +17,7 @@ export const getNearestWorkshop = async (req, res) => {
   try {
     const { lat, lng, limit } = req.query;
 
-    const response = await axios.get("http://127.0.0.1:8000/workshop/nearest", {
+    const response = await axios.get("https://web-production-ca5ab.up.railway.app/workshop/nearest", {
       params: {
         lat,
         lng,
@@ -37,7 +37,7 @@ export const getWorkshopDetail = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const response = await axios.get(`http://127.0.0.1:8000/workshop/${id}`);
+    const response = await axios.get(`https://web-production-ca5ab.up.railway.app/workshop/${id}`);
 
     return res.json(response.data);
   } catch (e) {

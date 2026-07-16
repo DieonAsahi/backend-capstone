@@ -19,7 +19,7 @@ export const scanOcr = async (req, res) => {
       req.file.originalname,
     );
 
-    const response = await axios.post("http://127.0.0.1:8000/ocr", formData, {
+    const response = await axios.post("https://web-production-ca5ab.up.railway.app/ocr", formData, {
       headers: formData.getHeaders(),
     });
 
