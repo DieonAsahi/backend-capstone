@@ -1,6 +1,5 @@
 import axios from "axios";
 import FormData from "form-data";
-import fs from "fs";
 
 export const scanOcr = async (req, res) => {
   try {
@@ -15,23 +14,26 @@ export const scanOcr = async (req, res) => {
 
     formData.append(
       "file",
-      fs.createReadStream(req.file.path),
-      req.file.originalname,
+      req.file.buffer,
+      {
+        filename: req.file.originalname,
+        contentType: req.file.mimetype,
+      }
     );
 
-    const response = await axios.post("https://web-production-ca5ab.up.railway.app/ocr", formData, {
-      headers: formData.getHeaders(),
-    });
-
-    console.log("OCR RESPONSE:");
-    console.log(response.data);
-
-    fs.unlinkSync(req.file.path);
+    const response = await axios.post(
+      "https://web-production-ca5ab.up.railway.app/ocr",
+      formData,
+      {
+        headers: formData.getHeaders(),
+      }
+    );
 
     return res.json({
       success: true,
       odometer: response.data.odometer,
     });
+
   } catch (e) {
     console.log(e);
 
