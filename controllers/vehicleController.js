@@ -1,20 +1,28 @@
 import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
+import streamifier from "streamifier";
 
 export const uploadVehicleImage = async (req, res) => {
   try {
-    console.log(req.file);
     if (!req.file) {
       return res.status(400).json({
         error: "File tidak ditemukan",
       });
     }
 
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "motocare/vehicle",
-    });
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          folder: "motocare/vehicle",
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        },
+      );
 
-    fs.unlinkSync(req.file.path);
+      streamifier.createReadStream(req.file.buffer).pipe(stream);
+    });
 
     return res.status(200).json({
       url: result.secure_url,
